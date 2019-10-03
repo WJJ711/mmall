@@ -10,8 +10,8 @@
         </filter>
     </appender>
 
-    <appender name="mmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--<File>d:/mmalllog/mmall.log</File>-->
+   <!-- <appender name="mmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        &lt;!&ndash;<File>d:/mmalllog/mmall.log</File>&ndash;&gt;
         <File>D:\developer\mmall\logs\mmall.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>D:\developer\mmall\logs\mmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
@@ -25,11 +25,11 @@
 
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--<File>d:/mmalllog/error.log</File>-->
+        &lt;!&ndash;<File>d:/mmalllog/error.log</File>&ndash;&gt;
         <File>D:\developer\mmall\logs\error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>D:\developer\mmall\logs\error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <!--<fileNamePattern>d:/mmalllog/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            &lt;!&ndash;<fileNamePattern>d:/mmalllog/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>&ndash;&gt;
             <append>true</append>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -48,7 +48,7 @@
         <appender-ref ref="console"/>
     </logger>
 
-
+-->
 
     <!-- geelynote mybatis log 日志 -->
 
