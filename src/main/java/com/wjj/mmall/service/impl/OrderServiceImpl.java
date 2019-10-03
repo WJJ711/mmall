@@ -1,7 +1,8 @@
 package com.wjj.mmall.service.impl;
 
+
+
 import com.alipay.api.AlipayResponse;
-import com.alipay.api.domain.Car;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
