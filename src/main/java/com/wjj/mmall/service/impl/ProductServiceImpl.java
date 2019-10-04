@@ -144,7 +144,11 @@ public class ProductServiceImpl implements IProductService {
         for (Product product : products) {
             productVoList.add(assembleProductListVo(product));
         }
-        PageInfo pageInfo=new PageInfo(productVoList);
+        /*
+        pageHelper分页主要是通过aop来实现的
+         */
+        PageInfo pageInfo=new PageInfo(products);
+        pageInfo.setList(productVoList);
         return ServerResponse.createBySuccess(pageInfo);
     }
 
@@ -172,7 +176,8 @@ public class ProductServiceImpl implements IProductService {
         for (Product product : productList) {
             productVoList.add(assembleProductListVo(product));
         }
-        PageInfo pageInfo=new PageInfo(productVoList);
+        PageInfo pageInfo=new PageInfo(productList);
+        pageInfo.setList(productVoList);
         return ServerResponse.createBySuccess(pageInfo);
     }
 
@@ -190,6 +195,7 @@ public class ProductServiceImpl implements IProductService {
                 PageHelper.startPage(pageNum,pageSize);
                 List<ProductListVo> productListVoList=Lists.newArrayList();
                 PageInfo<ProductListVo> pageInfo = new PageInfo<>(productListVoList);
+                pageInfo.setList(productListVoList);
                 return ServerResponse.createBySuccess(pageInfo);
             }
             categoryIdList=iCategoryService.selectCategoryAndChildrenById(categoryId).getData();

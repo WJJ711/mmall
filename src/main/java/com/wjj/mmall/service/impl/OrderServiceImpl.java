@@ -450,6 +450,8 @@ public class OrderServiceImpl implements IOrderService {
                 File targetFile = new File(path, qrFileName);
                 try {
                     FtpUtil.uploadFile(Lists.newArrayList(targetFile));
+                    targetFile.delete();
+
                 } catch (IOException e) {
                     log.error("上传二维码异常",e);
                 }

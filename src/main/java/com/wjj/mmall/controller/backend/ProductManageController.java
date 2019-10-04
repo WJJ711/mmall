@@ -152,7 +152,7 @@ public class ProductManageController {
             //填充业务
             String path = request.getSession().getServletContext().getRealPath("upload");
             System.out.println(path+"------------------------------------------------------");
-            String targetFileName = iFileService.upload(file, path);
+            String targetFileName =  iFileService.upload(file, path);
             String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
             if (StringUtils.isBlank(targetFileName)){
                 resultMap.put("success",false);
