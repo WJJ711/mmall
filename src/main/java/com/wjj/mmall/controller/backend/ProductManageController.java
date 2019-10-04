@@ -1,7 +1,6 @@
 package com.wjj.mmall.controller.backend;
 
 import com.google.common.collect.Maps;
-import com.sun.deploy.net.HttpResponse;
 import com.wjj.mmall.common.Const;
 import com.wjj.mmall.common.ResponseCode;
 import com.wjj.mmall.common.ServerResponse;
