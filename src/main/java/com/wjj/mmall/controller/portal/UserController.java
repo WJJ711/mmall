@@ -35,13 +35,11 @@ public class UserController {
      */
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest){
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpServletResponse){
         ServerResponse<User> response=iUserService.login(username,password);
         if (response.isSuccess()){
             //session.setAttribute(Const.CURRENT_USER,response.getData());
             CookieUtil.writeLoginToken(httpServletResponse,session.getId());
-            String token = CookieUtil.readLoginToken(httpServletRequest);
-            CookieUtil.delLoginToken(httpServletRequest,httpServletResponse);
             RedisPoolUtil.setEx(session.getId(),JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
 
@@ -49,8 +47,10 @@ public class UserController {
     }
     @RequestMapping(value = "logout.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session){
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(HttpServletRequest request,HttpServletResponse response){
+        String loginToken = CookieUtil.readLoginToken(request);
+        CookieUtil.delLoginToken(request,response);
+        RedisPoolUtil.del(loginToken);
         return ServerResponse.createBySuccess();
     }
     @RequestMapping(value = "register.do",method = RequestMethod.POST)
@@ -67,12 +67,18 @@ public class UserController {
 
     @RequestMapping(value = "get_user_info.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session){
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<User> getUserInfo(HttpServletRequest request){
+        String token = CookieUtil.readLoginToken(request);
+        if(StringUtils.isEmpty(token)){
+            return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
+        }
+        String userJsonStr = RedisPoolUtil.get(token);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user!=null){
             return ServerResponse.createBySuccess(user);
         }
-        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
+        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户信息");
+
     }
 
     @RequestMapping(value = "forget_get_question.do",method = RequestMethod.POST)
