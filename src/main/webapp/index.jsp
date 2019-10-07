@@ -11,6 +11,7 @@
     <title>Title</title>
 </head>
 <body>
+11111111111111
 springmvc 文件上传
 <form name="form1" action="/manage/product/upload.do" method="post" enctype="multipart/form-data">
     <input type="file" name="upload_file">

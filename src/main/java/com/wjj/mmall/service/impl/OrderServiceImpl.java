@@ -29,6 +29,7 @@ import com.wjj.mmall.vo.OrderItemVo;
 import com.wjj.mmall.vo.OrderProductVo;
 import com.wjj.mmall.vo.OrderVo;
 import com.wjj.mmall.vo.ShippingVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.weaver.ast.Or;
@@ -43,9 +44,9 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service("iOrderService")
+@Slf4j
 public class OrderServiceImpl implements IOrderService {
 
-    private Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private OrderMapper orderMapper;
