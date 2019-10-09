@@ -6,14 +6,13 @@ import com.wjj.mmall.pojo.User;
 import com.wjj.mmall.service.IUserService;
 import com.wjj.mmall.util.CookieUtil;
 import com.wjj.mmall.util.JsonUtil;
-import com.wjj.mmall.util.RedisPoolUtil;
+import com.wjj.mmall.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -33,7 +32,7 @@ public class UserManageController {
             if(user.getRole()== Const.Role.ROLE_ADMIN){
                 //说明是管理员
                 CookieUtil.writeLoginToken(httpServletResponse,session.getId());
-                RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+                RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
 
                 return response;
             }else {

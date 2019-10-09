@@ -1,7 +1,6 @@
 package com.wjj.mmall.controller.backend;
 
 import com.github.pagehelper.PageInfo;
-import com.wjj.mmall.common.Const;
 import com.wjj.mmall.common.ResponseCode;
 import com.wjj.mmall.common.ServerResponse;
 import com.wjj.mmall.pojo.User;
@@ -9,7 +8,7 @@ import com.wjj.mmall.service.IOrderService;
 import com.wjj.mmall.service.IUserService;
 import com.wjj.mmall.util.CookieUtil;
 import com.wjj.mmall.util.JsonUtil;
-import com.wjj.mmall.util.RedisPoolUtil;
+import com.wjj.mmall.util.RedisShardedPoolUtil;
 import com.wjj.mmall.vo.OrderVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/manage/order")
@@ -39,7 +37,7 @@ public class OrderManageController {
         if(StringUtils.isEmpty(token)){
             return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
         }
-        String userJsonStr = RedisPoolUtil.get(token);
+        String userJsonStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录管理员");
@@ -60,7 +58,7 @@ public class OrderManageController {
         if(StringUtils.isEmpty(token)){
             return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
         }
-        String userJsonStr = RedisPoolUtil.get(token);
+        String userJsonStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录管理员");
@@ -81,7 +79,7 @@ public class OrderManageController {
         if(StringUtils.isEmpty(token)){
             return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
         }
-        String userJsonStr = RedisPoolUtil.get(token);
+        String userJsonStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录管理员");
@@ -101,7 +99,7 @@ public class OrderManageController {
         if(StringUtils.isEmpty(token)){
             return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
         }
-        String userJsonStr = RedisPoolUtil.get(token);
+        String userJsonStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录，请登录管理员");

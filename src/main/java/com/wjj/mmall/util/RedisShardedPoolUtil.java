@@ -1,12 +1,12 @@
 package com.wjj.mmall.util;
 
-import com.wjj.mmall.common.RedisPool;
+
+import com.wjj.mmall.common.RedisShardedPool;
 import lombok.extern.slf4j.Slf4j;
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ShardedJedis;
 
 @Slf4j
-public class RedisPoolUtil {
-
+public class RedisShardedPoolUtil {
     /**
      * 设置key的有效期，单位是秒
      * @param key
@@ -14,95 +14,84 @@ public class RedisPoolUtil {
      * @return
      */
     public static Long expire(String key,int exTime){
-        Jedis jedis=null;
+        ShardedJedis jedis=null;
         Long result=null;
 
         try {
-            jedis= RedisPool.getJedis();
+            jedis= RedisShardedPool.getJedis();
             result=jedis.expire(key,exTime);
         } catch (Exception e) {
             log.error("set key:{} value:{} error",key,e);
-            RedisPool.returnBrokenResource(jedis);
+            RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }
-        RedisPool.returnResource(jedis);
+        RedisShardedPool.returnResource(jedis);
         return result;
     }
 
     //exTime的单位是秒
     public static String setEx(String key,String value,int exTime){
-        Jedis jedis=null;
+        ShardedJedis jedis=null;
         String result=null;
 
         try {
-            jedis= RedisPool.getJedis();
+            jedis= RedisShardedPool.getJedis();
             result=jedis.setex(key,exTime,value);
         } catch (Exception e) {
             log.error("set key:{} value:{} error",key,value,e);
-            RedisPool.returnBrokenResource(jedis);
+            RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }
-        RedisPool.returnResource(jedis);
+        RedisShardedPool.returnResource(jedis);
         return result;
     }
 
     public static String set(String key,String value){
-        Jedis jedis=null;
+        ShardedJedis jedis=null;
         String result=null;
 
         try {
-            jedis= RedisPool.getJedis();
+            jedis= RedisShardedPool.getJedis();
             result=jedis.set(key,value);
         } catch (Exception e) {
             log.error("set key:{} value:{} error",key,value,e);
-            RedisPool.returnBrokenResource(jedis);
+            RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }
-        RedisPool.returnResource(jedis);
+        RedisShardedPool.returnResource(jedis);
         return result;
     }
 
     public static String get(String key){
-        Jedis jedis=null;
+        ShardedJedis jedis=null;
         String result=null;
 
         try {
-            jedis=RedisPool.getJedis();
+            jedis= RedisShardedPool.getJedis();
             result=jedis.get(key);
         } catch (Exception e) {
             log.error("get key:{} error",key,e);
-            RedisPool.returnBrokenResource(jedis);
+            RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }
-        RedisPool.returnResource(jedis);
+        RedisShardedPool.returnResource(jedis);
         return result;
     }
 
     public static Long del(String key){
-        Jedis jedis=null;
+        ShardedJedis jedis=null;
         Long result=null;
 
         try {
-            jedis=RedisPool.getJedis();
+            jedis=RedisShardedPool.getJedis();
             result=jedis.del(key);
         } catch (Exception e) {
             log.error("get key:{} error",key,e);
-            RedisPool.returnBrokenResource(jedis);
+            RedisShardedPool.returnBrokenResource(jedis);
             return result;
         }
-        RedisPool.returnResource(jedis);
+        RedisShardedPool.returnResource(jedis);
         return result;
-    }
-
-
-    public static void main(String[] args) {
-        RedisShardedPoolUtil.set("keyTest","value");
-        String ketTest = RedisShardedPoolUtil.get("keyTest");
-        RedisShardedPoolUtil.setEx("keyex","valueex",60*10);
-        RedisShardedPoolUtil.expire("keyTest",60*20);
-        RedisShardedPoolUtil.del("keyTest");
-        System.out.println("end");
-
     }
 
 }
