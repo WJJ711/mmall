@@ -23,13 +23,13 @@ public class UserManageController {
     @Autowired
     private IUserService iUserService;
 
-    @RequestMapping(value = "login.do",method = RequestMethod.POST)
+    @RequestMapping(value = "login.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpServletResponse httpServletResponse,HttpSession session){
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()){
             User user = response.getData();
-            if(user.getRole()== Const.Role.ROLE_ADMIN){
+            if(user.getRole().intValue()== Const.Role.ROLE_ADMIN){
                 //说明是管理员
                 CookieUtil.writeLoginToken(httpServletResponse,session.getId());
                 RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
