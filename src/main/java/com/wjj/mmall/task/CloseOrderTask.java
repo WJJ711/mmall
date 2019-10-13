@@ -67,7 +67,7 @@ public class CloseOrderTask {
     /**
      * 双重防死锁
      */
- //   @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void closeOrderTaskV3(){
         log.info("关闭订单定时任务启动");
         //从配置文件中获取过期时间，测试时用50s,上线时用5s
@@ -105,14 +105,14 @@ public class CloseOrderTask {
         log.info("关闭订单定时任务关闭");
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void closeOrderTaskV4(){
         RLock lock = redissonManager.getRedisson().getLock(Const.REDIS_LOCK.CLOSE_ORDED_TASK_LOCK);
         boolean getLock=false;
         try {
-            //第一个waitTime
+            //第一个waitTime 必须设置为0
             //第二个leaseTime
-            if (getLock=lock.tryLock(2,5, TimeUnit.SECONDS)){
+            if (getLock=lock.tryLock(0,50, TimeUnit.SECONDS)){
                 log.info("Redisson获取到分布式锁:{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDED_TASK_LOCK,Thread.currentThread().getName());
                 int hour=Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
                 //iOrderService.closeOrder(hour);
@@ -127,7 +127,7 @@ public class CloseOrderTask {
                 return;
             }
             lock.unlock();
-            log.info("关闭订单定时任务关闭");
+            log.info("Redisson分布式锁释放锁");
         }
     }
 
@@ -140,7 +140,7 @@ public class CloseOrderTask {
         log.info("获取{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDED_TASK_LOCK,Thread.currentThread().getName());
         int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour", "2"));
         //关闭订单，在测试时，先注释掉
-        //iOrderService.closeOrder(hour);
+        iOrderService.closeOrder(hour);
         //如果已经关闭了，就释放锁
         RedisShardedPoolUtil.del(Const.REDIS_LOCK.CLOSE_ORDED_TASK_LOCK);
         log.info("释放{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDED_TASK_LOCK,Thread.currentThread().getName());

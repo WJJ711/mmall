@@ -29,7 +29,7 @@ public class RedissonManager {
     private void init(){
         try {
             config.useSingleServer().setAddress(new StringBuilder().append(redis_1_Ip).append(":").append(redis_1_Port).toString());
-            Redisson redisson = (Redisson) Redisson.create(config);
+            redisson = (Redisson) Redisson.create(config);
             log.info("初始化Redisson结束");
         } catch (Exception e) {
             log.error("redisson init error",e);
